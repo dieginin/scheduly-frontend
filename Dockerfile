@@ -8,6 +8,8 @@ FROM node:25.6.1-alpine3.23 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG VITE_SCHEDULY_API_URL=/api
+ENV VITE_SCHEDULY_API_URL=$VITE_SCHEDULY_API_URL
 RUN yarn build
 
 
