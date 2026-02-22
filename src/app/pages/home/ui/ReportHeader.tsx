@@ -1,0 +1,58 @@
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { ChevronLeft, Download } from "lucide-react"
+import { type SetStateAction, useState } from "react"
+
+import { Button } from "@/shared/components/ui/button"
+import { buildReportClipboard } from "@/app/lib/report.utils"
+import { formatDate } from "@/app/lib/date.utils"
+import { toast } from "sonner"
+import { useAddShift } from "@/app/hooks/useAddShift"
+import { useReport } from "@/app/hooks/useReport"
+
+export const ReportHeader = ({ setShowReport }: { setShowReport: (value: SetStateAction<boolean>) => void }) => {
+  const [exporting, setExporting] = useState(false)
+  const { report, status, daysCount, workedTime, submitReport } = useReport()
+  const { AddDialog, setAddOpen } = useAddShift({ report: report! })
+
+  const handleSubmitReport = async () => {
+    setExporting(true)
+    await submitReport()
+      .then(() => {
+        navigator.clipboard.writeText(buildReportClipboard(report!, daysCount, workedTime))
+        toast.success(`Report #${report?.number} exported and copied to clipboard successfully`)
+      })
+      .catch(() => toast.error("Error exporting report"))
+      .finally(() => {
+        setExporting(false)
+        setShowReport(false)
+      })
+  }
+  return (
+    <Card>
+      <AddDialog />
+      <CardHeader className='items-center'>
+        <CardTitle className='text-3xl'>Report #{report?.number}</CardTitle>
+        <CardDescription className='font-thin'>
+          {formatDate(report?.startDate)} <small className='font-extrabold text-primary'>||</small> {formatDate(report?.endDate)}
+        </CardDescription>
+        <CardAction className='grid gap-2'>
+          <Button size='sm' variant='link' className='lg:hidden' onClick={() => setShowReport(false)} disabled={exporting}>
+            <ChevronLeft className='-mr-1' />
+            Back to dashboard
+          </Button>
+          <Button size='sm' variant='outline' onClick={() => setAddOpen(true)} disabled={status !== "idle"}>
+            Add past shift
+          </Button>
+          <Button size='sm' variant='ghost' onClick={handleSubmitReport} disabled={status !== "idle" || exporting}>
+            <Download />
+            Export
+          </Button>
+        </CardAction>
+      </CardHeader>
+
+      <CardContent className='text-center'>
+        {daysCount} days, {report?.shifts.length} shifts · {workedTime.hours} hours {workedTime.minutes} mins
+      </CardContent>
+    </Card>
+  )
+}
