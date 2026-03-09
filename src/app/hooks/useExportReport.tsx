@@ -21,13 +21,12 @@ export const useExportReport = ({ setShowReport }: { setShowReport: (value: SetS
   const { report, daysCount, workedTime, submitReport } = useReport()
 
   const handleSubmitReport = async () => {
-    await submitReport()
+    const clipboardText = buildReportClipboard(report!, daysCount, workedTime)
     await navigator.clipboard
-      .writeText(buildReportClipboard(report!, daysCount, workedTime))
-      .then(() => {
-        toast.success(`Report #${report?.number} copied to clipboard successfully`)
-      })
+      .writeText(clipboardText)
+      .then(() => toast.success(`Report #${report?.number} copied to clipboard successfully`))
       .catch(() => toast.error("Error while copying the report"))
+    await submitReport()
     setShowReport(false)
   }
 
