@@ -22,7 +22,7 @@ export const Report = ({ showReport, setShowReport }: Props) => {
         <div className='flex flex-col w-full gap-4'>
           <ReportHeader setShowReport={setShowReport} />
           <CurrentShift />
-          <FinishedShifts />
+          <FinishedShifts setShowReport={setShowReport} />
         </div>
       ) : (
         <Card className='w-full'>

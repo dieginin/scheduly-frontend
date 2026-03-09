@@ -1,14 +1,15 @@
 import { Edit, Trash } from "lucide-react"
 
 import { Button } from "@/shared/components/ui/button"
+import type { SetStateAction } from "react"
 import type { Shift } from "@/app/interfaces/shift.interface"
 import { useDeleteShift } from "@/app/hooks/useDeleteShift"
 import { useEditShift } from "@/app/hooks/useEditShift"
 import { useReport } from "@/app/hooks/useReport"
 
-export const ShiftActions = ({ shift }: { shift: Shift }) => {
+export const ShiftActions = ({ shift, setShowReport }: { shift: Shift; setShowReport: (value: SetStateAction<boolean>) => void }) => {
   const { report } = useReport()
-  const { DeleteConfirmationDialog, setDeleteConfirmationOpen } = useDeleteShift({ report: report!, shift })
+  const { DeleteConfirmationDialog, setDeleteConfirmationOpen } = useDeleteShift({ report: report!, shift, setShowReport })
   const { EditDialog, setEditOpen } = useEditShift({ report: report!, shift })
 
   return (

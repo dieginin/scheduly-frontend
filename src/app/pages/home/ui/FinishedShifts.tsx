@@ -3,11 +3,12 @@ import { Coffee, Toolbox } from "lucide-react"
 import { formatDate, formatTime } from "@/app/lib/date.utils"
 import { lunchDuration, shiftDuration } from "@/app/lib/report.utils"
 
+import type { SetStateAction } from "react"
 import { ShiftActions } from "./ShiftActions"
 import { TimeBadge } from "./TimeBadge"
 import { useReport } from "@/app/hooks/useReport"
 
-export const FinishedShifts = () => {
+export const FinishedShifts = ({ setShowReport }: { setShowReport: (value: SetStateAction<boolean>) => void }) => {
   const { report } = useReport()
   const shifts = report?.shifts.filter(s => !!s.endDate) ?? []
 
@@ -23,7 +24,7 @@ export const FinishedShifts = () => {
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
     .map((shift, index) => (
       <Card key={`${index}-${shift.startDate.getTime()}`} className='relative text-xl font-thin tracking-widest text-center gap-2'>
-        <ShiftActions shift={shift} />
+        <ShiftActions shift={shift} setShowReport={setShowReport} />
 
         <CardTitle>Shift {index + 1}</CardTitle>
         <CardDescription>

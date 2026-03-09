@@ -14,16 +14,22 @@ import type { Report } from "../interfaces/report.interface"
 import type { Shift } from "../interfaces/shift.interface"
 import { Trash } from "lucide-react"
 import { useReport } from "./useReport"
-import { useState } from "react"
+import { useState, type SetStateAction } from "react"
 
 interface Props {
   report: Report
   shift: Shift
+  setShowReport: (value: SetStateAction<boolean>) => void
 }
 
-export const useDeleteShift = ({ report, shift }: Props) => {
+export const useDeleteShift = ({ report, shift, setShowReport }: Props) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
   const { removeShift } = useReport()
+
+  const handleDelete = async () => {
+    await removeShift(report, shift)
+    if (report.shifts.length - 1 === 0) setShowReport(false)
+  }
 
   const DeleteConfirmationDialog = () => (
     <AlertDialog open={deleteConfirmationOpen} onOpenChange={setDeleteConfirmationOpen}>
@@ -42,7 +48,7 @@ export const useDeleteShift = ({ report, shift }: Props) => {
 
         <AlertDialogFooter>
           <AlertDialogCancel variant='outline'>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant='destructive' onClick={async () => await removeShift(report, shift)}>
+          <AlertDialogAction variant='destructive' onClick={handleDelete}>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
