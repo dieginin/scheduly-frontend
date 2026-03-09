@@ -71,7 +71,7 @@ export const DateField = <T extends FieldValues>({ field, fieldState, label, var
                   return
                 }
 
-                const [hours, minutes, seconds] = e.target.value.split(":").map(Number)
+                const [hours, minutes, seconds = 0] = e.target.value.split(":").map(Number)
 
                 if (field.value) {
                   const newDate = new Date(field.value)
