@@ -17,15 +17,14 @@ export const ReportHeader = ({ setShowReport }: { setShowReport: (value: SetStat
   const handleSubmitReport = async () => {
     setExporting(true)
     await submitReport()
+    await navigator.clipboard
+      .writeText(buildReportClipboard(report!, daysCount, workedTime))
       .then(() => {
-        navigator.clipboard.writeText(buildReportClipboard(report!, daysCount, workedTime))
-        toast.success(`Report #${report?.number} exported and copied to clipboard successfully`)
+        toast.success(`Report #${report?.number} copied to clipboard successfully`)
       })
-      .catch(() => toast.error("Error exporting report"))
-      .finally(() => {
-        setExporting(false)
-        setShowReport(false)
-      })
+      .catch(() => toast.error("Error while copying the report"))
+    setExporting(false)
+    setShowReport(false)
   }
 
   return (
@@ -49,6 +48,7 @@ export const ReportHeader = ({ setShowReport }: { setShowReport: (value: SetStat
           </Button>
           <Button size='sm' variant='ghost' onClick={handleSubmitReport} disabled={status !== "idle" || exporting}>
             <Download />
+            {/* TODO confirm dialog & dropdown export pdf or text */}
             Export
           </Button>
         </CardAction>
