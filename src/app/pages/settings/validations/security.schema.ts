@@ -6,10 +6,10 @@ export type SecurityFormData = z.infer<typeof securityFormSchema>
 
 export const securityFormSchema = z
   .object({
-    newPassword: z.string().trim().min(PASSWORD_MIN, validationMessages.passwordMin),
-    confirmNewPassword: z.string().trim().min(PASSWORD_MIN, validationMessages.passwordMin),
+    password: z.string().trim().min(PASSWORD_MIN, validationMessages.passwordMin),
+    confirmPassword: z.string().trim().min(PASSWORD_MIN, validationMessages.passwordMin),
   })
-  .refine(data => data.newPassword === data.confirmNewPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     error: validationMessages.passwordMatch,
-    path: ["confirmNewPassword"],
+    path: ["confirmPassword"],
   })
