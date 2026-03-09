@@ -16,7 +16,12 @@ export const createHistorySlice: StateCreator<ReportStore, [], [], HistorySlice>
     if (report && shift) report.shifts = report?.shifts.filter(r => r.id !== shift.id)
     reports = report ? reports.filter(r => r.number !== report.number) : reports
 
-    set({ report, reports, shift })
+    const isWorking = !!shift
+    const isLunching = !!shift?.lunchStart && !shift?.lunchEnd
+    const tookLunch = !!shift?.lunchStart && !!shift?.lunchEnd
+    const status = isLunching ? "lunch" : isWorking ? "working" : "idle"
+
+    set({ report, reports, shift, status, isLunching, isWorking, tookLunch })
   },
   submitReport: async () => {
     let report = get().report!
