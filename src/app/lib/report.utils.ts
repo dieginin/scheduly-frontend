@@ -21,9 +21,9 @@ const durationBetween = (start?: Date | string | null, end?: Date | string | nul
   const endDate = end instanceof Date ? end : new Date(end)
 
   const diffMs = endDate.getTime() - startDate.getTime()
-  const totalMinutes = Math.floor(diffMs / (1000 * 60))
+  const totalMinutes = Math.round(diffMs / (1000 * 60))
 
-  return { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 }
+  return { hours: Math.round(totalMinutes / 60), minutes: totalMinutes % 60 }
 }
 
 export const shiftDuration = (shift: Shift | null) => durationBetween(shift?.startDate, shift?.endDate)
