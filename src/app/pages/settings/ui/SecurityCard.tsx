@@ -11,15 +11,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 const fields: Field<SecurityFormData>[] = [
   {
-    label: "Password",
-    name: "password",
-    placeholder: "Enter your password",
+    label: "New Password",
+    name: "newPassword",
+    placeholder: "Enter your new password",
     type: "password",
   },
   {
-    label: "Confirm Password",
-    name: "confirmPassword",
-    placeholder: "Confirm your password",
+    label: "Confirm New Password",
+    name: "confirmNewPassword",
+    placeholder: "Confirm your new password",
     type: "password",
   },
 ]
@@ -29,15 +29,15 @@ export const SecurityCard = () => {
   const form = useForm<SecurityFormData>({
     resolver: zodResolver(securityFormSchema),
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
   })
 
   const onSubmit = async (data: SecurityFormData) => {
-    const { password } = data
+    const { newPassword } = data
 
-    const isUpdateSuccess = await updatedPassword(password)
+    const isUpdateSuccess = await updatedPassword(newPassword)
 
     if (isUpdateSuccess) return toast.success("Password updated")
   }
