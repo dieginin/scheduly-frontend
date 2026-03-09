@@ -27,13 +27,17 @@ export const ReportHeader = ({ setShowReport }: { setShowReport: (value: SetStat
         setShowReport(false)
       })
   }
+
   return (
     <Card>
       <AddDialog />
       <CardHeader className='items-center'>
         <CardTitle className='text-3xl'>Report #{report?.number}</CardTitle>
         <CardDescription className='font-thin'>
-          {formatDate(report?.startDate)} <small className='font-extrabold text-primary'>||</small> {formatDate(report?.endDate)}
+          <small className='font-extrabold text-primary lg:hidden'>First:</small> {formatDate(report?.startDate)}
+          <small className='hidden font-extrabold text-primary lg:inline'> || </small>
+          <br className='block font-extrabold text-primary lg:hidden' />
+          <small className='font-extrabold text-primary lg:hidden'>Last:</small> {formatDate(report?.endDate)}
         </CardDescription>
         <CardAction className='grid gap-2'>
           <Button size='sm' variant='link' className='lg:hidden' onClick={() => setShowReport(false)} disabled={exporting}>
