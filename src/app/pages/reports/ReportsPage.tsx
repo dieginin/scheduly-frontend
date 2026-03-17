@@ -15,6 +15,8 @@ export const ReportsPage = () => {
       <BackButton />
 
       <div className='grid gap-5 w-sm md:w-2xl'>
+        {!reports.length && <h1 className='text-2xl tracking-widest text-center text-muted'>No reports available</h1>}
+
         {reports.map(report => (
           <Card key={`${report.id}-${report.startDate.getTime()}`} className='relative text-xl font-thin tracking-widest text-center gap-2'>
             <div className='absolute right-4'>
