@@ -14,14 +14,14 @@ interface Props {
 }
 
 export const Report = ({ showReport, setShowReport }: Props) => {
-  const { report } = useReport()
+  const { report, isWorking } = useReport()
 
   return (
     <div className={cn(showReport ? "flex animate-fadeIn lg:animate-none" : "hidden lg:flex")}>
       {report ? (
         <div className='flex flex-col w-full gap-4'>
           <ReportHeader setShowReport={setShowReport} />
-          <CurrentShift />
+          {isWorking && <CurrentShift />}
           <FinishedShifts setShowReport={setShowReport} />
         </div>
       ) : (
