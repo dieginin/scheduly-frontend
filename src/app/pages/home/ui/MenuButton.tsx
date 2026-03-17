@@ -49,7 +49,7 @@ export const MenuButton = () => {
           <DropdownMenuSeparator />
 
           {routes.map(route => (
-            <DropdownMenuItem key={route.label} onClick={() => navigate(route.path)} disabled={route.label === "Reports"}>
+            <DropdownMenuItem key={route.label} onClick={() => navigate(route.path)}>
               <route.icon />
               {route.label}
             </DropdownMenuItem>

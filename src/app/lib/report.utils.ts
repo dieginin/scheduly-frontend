@@ -3,6 +3,7 @@ import { formatDate, formatTime } from "./date.utils"
 import type { Duration } from "../interfaces/util.interface"
 import type { Report } from "../interfaces/report.interface"
 import type { Shift } from "../interfaces/shift.interface"
+import { toast } from "sonner"
 
 export const calculateDays = (report: Report | null): number => {
   if (!report) return 0
@@ -45,6 +46,18 @@ export const workDuration = (report: Report | null): Duration => {
   return { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 }
 }
 
+export const eatDuration = (report: Report | null): Duration => {
+  let totalMinutes = 0
+  report?.shifts.forEach(shift => {
+    const lunchDuration = durationBetween(shift.lunchStart, shift.lunchEnd)
+
+    const lunchMinutes = lunchDuration.hours * 60 + lunchDuration.minutes
+    totalMinutes += lunchMinutes
+  })
+
+  return { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 }
+}
+
 export const buildReportClipboard = (report: Report, daysCount: number, workedTime: Duration) => {
   const shifts = [...report.shifts]
     .filter(shift => {
@@ -74,4 +87,12 @@ export const buildReportClipboard = (report: Report, daysCount: number, workedTi
     "Shifts:",
     ...shiftLines,
   ].join("\n")
+}
+
+export const copyReportToClipboard = async (report: Report | null, daysCount: number, workedTime: Duration) => {
+  const clipboardText = buildReportClipboard(report!, daysCount, workedTime)
+  await navigator.clipboard
+    .writeText(clipboardText)
+    .then(() => toast.success(`Report #${report?.number} copied to clipboard successfully`))
+    .catch(() => toast.error("Error while copying the report"))
 }

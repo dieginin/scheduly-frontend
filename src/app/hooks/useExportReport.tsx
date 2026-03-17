@@ -12,8 +12,7 @@ import {
 import { type SetStateAction, useState } from "react"
 
 import { Download } from "lucide-react"
-import { buildReportClipboard } from "@/app/lib/report.utils"
-import { toast } from "sonner"
+import { copyReportToClipboard } from "@/app/lib/report.utils"
 import { useReport } from "./useReport"
 
 export const useExportReport = ({ setShowReport }: { setShowReport: (value: SetStateAction<boolean>) => void }) => {
@@ -21,11 +20,7 @@ export const useExportReport = ({ setShowReport }: { setShowReport: (value: SetS
   const { report, daysCount, workedTime, submitReport } = useReport()
 
   const handleSubmitReport = async () => {
-    const clipboardText = buildReportClipboard(report!, daysCount, workedTime)
-    await navigator.clipboard
-      .writeText(clipboardText)
-      .then(() => toast.success(`Report #${report?.number} copied to clipboard successfully`))
-      .catch(() => toast.error("Error while copying the report"))
+    await copyReportToClipboard(report, daysCount, workedTime)
     await submitReport()
     setShowReport(false)
   }
