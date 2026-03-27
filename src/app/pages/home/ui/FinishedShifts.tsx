@@ -21,12 +21,12 @@ export const FinishedShifts = ({ setShowReport }: { setShowReport: (value: SetSt
     )
 
   return shifts
-    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .sort((a, b) => b.startDate.getTime() - a.startDate.getTime())
     .map((shift, index) => (
       <Card key={`${index}-${shift.startDate.getTime()}`} className='relative text-xl font-thin tracking-widest text-center gap-2'>
         <ShiftActions shift={shift} setShowReport={setShowReport} />
 
-        <CardTitle>Shift {index + 1}</CardTitle>
+        <CardTitle>Shift {shifts.length - index}</CardTitle>
         <CardDescription>
           {formatDate(shift.startDate)} <small className='font-extrabold text-primary'>||</small> {formatDate(shift.endDate)}
           <p>
