@@ -9,7 +9,7 @@ const clockIn = async (report: Report) => {
 
 const clockOut = async (report: Report, shift: Shift) => {
   const currentDate = new Date()
-  const lunchEnd = shift.lunchStart ? currentDate : undefined
+  const lunchEnd = shift.lunchStart && !shift.lunchEnd ? currentDate : undefined
   const { data } = await schedulyApi.patch<Report>(`/reports/${report.id}/shifts/${shift.id}`, { endDate: currentDate, lunchEnd })
   return data
 }
